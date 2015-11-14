@@ -12,23 +12,29 @@ var gulp =	require('gulp'),
 	config = require('../configuration');
 
 gulp.task('scss', function(){
-	if(config.getenv() == "production"){
+	// clean before go release
+	if(config.getenv() == "rel"){
 		gulp.src([
 				config.destFolders.css+'**/*.css',
 				config.destFolders.css+'**/*.css.map',
 			], {read: false})
 			.pipe(rm({async: false}));
 	}
+	// clean before go release
+	
 	gulp.src(config.targets.scss)
 		.pipe(debug())
-		.pipe(gulpif(config.getenv() == "dev", sourcemaps.init()))
+		.pipe(gulpif(config.getenv() == "dev", sourcemaps.init())) 
 		.pipe(sass())
 		.on('error', function(err) {
 			sass.logError(err);
 			process.exit(2);
 		})
-		.pipe(gulpif(config.getenv() == "production", minify()))
-		.pipe(gulpif(config.getenv() == "production", rename({ 
+		// options from minify directly pass to https://github.com/jakubpawlowicz/clean-css
+		.pipe(gulpif(config.getenv() == "rel", minify({
+			compatibility: 'ie8'
+		})))
+		.pipe(gulpif(config.getenv() == "rel", rename({ 
 			extname: '.min.css'
 		})))
 		.pipe(gulpif(config.getenv() == "dev", sourcemaps.write('maps')))

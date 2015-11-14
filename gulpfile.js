@@ -16,8 +16,8 @@ gulp.task('default', function (task) {
 });
 
 /* production tasks */
-gulp.task('production', function (task) {
-	config.setenv('production');
+gulp.task('rel', function (task) {
+	config.setenv('rel');
 	runSequence(['scss'], task);
 });
 

@@ -8,9 +8,9 @@ config.targets = {
 };
 
 config.destFolders = {
-	js: 'dist/static/js/',
-	css: 'dist/static/css/',
-	images: 'dist/static/images/'
+	js: 'dest/static/js/',
+	css: 'dest/static/css/',
+	images: 'dest/static/images/'
 }
 
 config.setenv = function (environment) {
