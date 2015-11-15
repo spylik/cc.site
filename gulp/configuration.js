@@ -13,6 +13,8 @@ config.destFolders = {
 	images: 'dest/static/images/'
 }
 
+config.tempFolder = 'temp/'
+
 config.setenv = function (environment) {
     'use strict ';
     env = environment;

@@ -1,14 +1,12 @@
 var gulp =	require('gulp'),
 	rename = require('gulp-rename'),
-	runSequence = require('run-sequence'),
 	debug = require('gulp-debug'),
 	sass = require('gulp-sass'),
-	eol = require('gulp-eol'),
 	gulpif = require('gulp-if'),
 	minify = require('gulp-minify-css'),
 	sourcemaps = require('gulp-sourcemaps'),
-	concat = require('gulp-concat'),
 	rm = require('gulp-rm'),
+	rev = require('gulp-rev'),
 	config = require('../configuration');
 
 gulp.task('scss', function(){
@@ -34,11 +32,17 @@ gulp.task('scss', function(){
 		.pipe(gulpif(config.getenv() == "rel", minify({
 			compatibility: 'ie8'
 		})))
-		.pipe(gulpif(config.getenv() == "rel", rename({ 
-			extname: '.min.css'
-		})))
+//		.pipe(gulpif(config.getenv() == "rel", rename({ 
+//			extname: '.min.css'
+//		})))
+		.pipe(gulpif(config.getenv() == "rel", rev()))
 		.pipe(gulpif(config.getenv() == "dev", sourcemaps.write('maps')))
-		.pipe(gulp.dest(config.destFolders.css));
+		.pipe(gulp.dest(config.destFolders.css))
+		.pipe(gulpif(config.getenv() == "rel", rev.manifest({
+			merge: true
+		}))) 
+		.pipe(gulp.dest(config.tempFolder));
+
 });
 
 gulp.task('watch-scss', function(){
