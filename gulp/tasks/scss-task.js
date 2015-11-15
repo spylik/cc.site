@@ -9,6 +9,7 @@ var gulp =	require('gulp'),
 	rev = require('gulp-rev'),
 	config = require('../configuration');
 
+
 gulp.task('scss', function(){
 	// clean before go release
 	if(config.getenv() == "rel"){
@@ -41,11 +42,10 @@ gulp.task('scss', function(){
 		.pipe(gulpif(config.getenv() == "rel", rev.manifest({
 			merge: true
 		}))) 
-		.pipe(gulp.dest(config.tempFolder));
-
+		.pipe(gulp.dest(config.revFolders.css));
 });
 
 gulp.task('watch-scss', function(){
-
+	return gulp.watch(config.targets.scss, ['scss'])
 });
 

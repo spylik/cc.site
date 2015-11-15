@@ -1,6 +1,8 @@
 var env = 'dev';
 var config = module.exports = {};
 
+config.tempFolder = 'tmp/'
+
 config.targets = {
 	js: ['src/js/**/*.js'],
 	scss: ['src/scss/**/*.scss'],
@@ -13,7 +15,12 @@ config.destFolders = {
 	images: 'dest/static/images/'
 }
 
-config.tempFolder = 'temp/'
+config.revFolders = {
+	js: config.tempFolder+'rev/js/',
+	css: config.tempFolder+'rev/css/',
+	images: config.tempFolder+'rev/images/'
+}
+
 
 config.setenv = function (environment) {
     'use strict ';

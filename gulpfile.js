@@ -12,7 +12,7 @@ var config = require('./gulp/configuration');
 /* development tasks */
 gulp.task('default', function (task) {
 	config.setenv('dev');
-	runSequence(['scss'], task);
+	runSequence(['scss'], ['watch-scss'], task);
 });
 
 /* production tasks */
