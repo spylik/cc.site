@@ -8,38 +8,46 @@ var gulp =	require('gulp'),
 	rm = require('gulp-rm'),
 	rev = require('gulp-rev'),
 	watch = require('gulp-watch'),
-	config = require('../configuration');
+	config = require('../configuration'),
+    clean = function(){
+        gulp.src(config.patternsForClean.css, {read: false})
+            .pipe(rm({async: false}));
+    };
 
-
-gulp.task('scss', function(){
-	// clean before go release
-	if(config.getenv() == "rel"){
-		gulp.src(config.patternsForClean.css, {read: false})
-			.pipe(rm({async: false}));
-	}
-	// clean before go release
-
+// watch routine
+gulp.task('scss-watch', function(){
+	clean(),
 	gulp.src(config.targets.scss)
-		.pipe(gulpif(config.getwatch() == "true", watch(config.targets.scss)))
 		.pipe(debug())
-		.pipe(gulpif(config.getenv() == "dev", sourcemaps.init())) 
+		.pipe(watch(config.targets.scss))
+		.pipe(sourcemaps.init()) 
+		.pipe(sass())
+		.on('error', function(err) {
+			sass.logError(err);
+			process.exit(2);
+		})
+		.pipe(sourcemaps.write('maps'))
+		.pipe(gulp.dest(config.destFolders.css));
+});
+
+// release routine
+gulp.task('scss-release', function(){
+	clean(),
+	gulp.src(config.targets.scss)
+		.pipe(debug())
 		.pipe(sass())
 		.on('error', function(err) {
 			sass.logError(err);
 			process.exit(2);
 		})
 		// options from minify directly pass to https://github.com/jakubpawlowicz/clean-css
-		.pipe(gulpif(config.getenv() == "rel", minify({
+		.pipe(minify({
 			compatibility: 'ie8'
-		})))
-//		.pipe(gulpif(config.getenv() == "rel", rename({ 
-//			extname: '.min.css'
-//		})))
-		.pipe(gulpif(config.getenv() == "rel", rev()))
-		.pipe(gulpif(config.getenv() == "dev", sourcemaps.write('maps')))
+		}))
+		.pipe(rev())
 		.pipe(gulp.dest(config.destFolders.css))
-		.pipe(gulpif(config.getenv() == "rel", rev.manifest({
+		.pipe(rev.manifest({
 			merge: true
-		}))) 
-		.pipe(gulp.dest(config.revFolders.css));
+		}))
+		.pipe(gulp.dest(config.revFolders.css));	
 });

@@ -5,23 +5,32 @@ var gulp =	require('gulp'),
 	rev = require('gulp-rev'),
 	watch = require('gulp-watch'),
 	rm = require('gulp-rm'),
-	config = require('../configuration');
-
-gulp.task('images', function(){
-	// clean before go release
-	if(config.getenv() == "rel"){
+	config = require('../configuration')
+	clean = function(){
 		gulp.src(config.patternsForClean.images, {read: false})
 			.pipe(rm({async: false}));
-	}
-	// clean before go release
+	};
 
+// watch routine
+gulp.task('images-watch', function(){
+	clean();
 	gulp.src(config.targets.images)
-//		.pipe(gulpif(config.getwatch() == "true", watch(config.targets.images)))
 		.pipe(debug())
-		.pipe(gulpif(config.getenv() == "rel", rev()))
+		.pipe(watch(config.targets.images))
+		.pipe(gulp.dest(config.destFolders.images));
+});
+
+// release routine
+gulp.task('images-release', function(){
+	clean();
+	gulp.src(config.targets.images)
+		.pipe(debug())
+		.pipe(rev())
 		.pipe(gulp.dest(config.destFolders.images))
-		.pipe(gulpif(config.getenv() == "rel", rev.manifest({
+		.pipe(rev.manifest({
 			merge: true
-		}))) 
+		})) 
 		.pipe(gulp.dest(config.revFolders.images));
 });
+
+

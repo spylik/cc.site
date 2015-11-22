@@ -11,15 +11,12 @@ var tasks = requireDir('./gulp/tasks');
 /* development tasks */
 gulp.task('default', function (task) {
 	config.setenv('dev');
-	config.setwatch('true');
-//	runSequence(['scss'], ['watch-scss'], task);
-	runSequence(['images'], ['scss'], task);
+	runSequence(['images-watch'], ['scss-watch'], task);
 });
 
 /* production tasks */
-gulp.task('rel', function (task) {
-	config.setenv('rel');
-	config.setwatch('false');
-	runSequence(['images'], ['scss'], task);
+gulp.task('release', function (task) {
+	config.setenv('release');
+	runSequence(['images-release'], ['scss-release'], task);
 });
 
