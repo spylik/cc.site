@@ -1,5 +1,5 @@
 var gulp =	require('gulp'),
-	rename = require('gulp-rename'),
+//	rename = require('gulp-rename'),
 	debug = require('gulp-debug'),
 	sass = require('gulp-sass'),
 	gulpif = require('gulp-if'),
@@ -7,21 +7,20 @@ var gulp =	require('gulp'),
 	sourcemaps = require('gulp-sourcemaps'),
 	rm = require('gulp-rm'),
 	rev = require('gulp-rev'),
+	watch = require('gulp-watch'),
 	config = require('../configuration');
 
 
 gulp.task('scss', function(){
 	// clean before go release
 	if(config.getenv() == "rel"){
-		gulp.src([
-				config.destFolders.css+'**/*.css',
-				config.destFolders.css+'**/*.css.map',
-			], {read: false})
+		gulp.src(config.patternsForClean.css, {read: false})
 			.pipe(rm({async: false}));
 	}
 	// clean before go release
-	
+
 	gulp.src(config.targets.scss)
+		.pipe(gulpif(config.getwatch() == "true", watch(config.targets.scss)))
 		.pipe(debug())
 		.pipe(gulpif(config.getenv() == "dev", sourcemaps.init())) 
 		.pipe(sass())
@@ -44,8 +43,3 @@ gulp.task('scss', function(){
 		}))) 
 		.pipe(gulp.dest(config.revFolders.css));
 });
-
-gulp.task('watch-scss', function(){
-	return gulp.watch(config.targets.scss, ['scss'])
-});
-

@@ -1,23 +1,25 @@
 'use strict';
 
 var gulp  = require('gulp');
-var debug = require('gulp-debug');
 var requireDir = require('require-dir');
 var runSequence = require('run-sequence');
 
-var tasks = requireDir('./gulp/tasks');
-
 var config = require('./gulp/configuration');
+
+var tasks = requireDir('./gulp/tasks');
 
 /* development tasks */
 gulp.task('default', function (task) {
 	config.setenv('dev');
-	runSequence(['scss'], ['watch-scss'], task);
+	config.setwatch('true');
+//	runSequence(['scss'], ['watch-scss'], task);
+	runSequence(['images'], ['scss'], task);
 });
 
 /* production tasks */
 gulp.task('rel', function (task) {
 	config.setenv('rel');
-	runSequence(['scss'], task);
+	config.setwatch('false');
+	runSequence(['images'], ['scss'], task);
 });
 

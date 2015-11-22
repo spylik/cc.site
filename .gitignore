@@ -3,3 +3,7 @@ node_modules/*
 .DS_Store
 dest/static/css/**/*.css
 dest/static/css/**/*.map
+dest/static/images/**/*.jpg
+dest/static/images/**/*.gif
+dest/static/images/**/*.png
+tmp/rev/**
