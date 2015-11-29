@@ -35,9 +35,11 @@ config.revFolders = {
 	js: config.tempFolder+'rev/js/',
 	css: config.tempFolder+'rev/css/',
 	images: config.tempFolder+'rev/images/',
-	html: config.tempFolder+'rev/html/',
+	html: config.tempFolder+'rev/html/'
 }
 
+// aws bucket for static content
+config.awsBucket = 'comfortcards';
 
 // set and get global env variable
 config.setenv = function (param) {
