@@ -6,18 +6,19 @@ config.tempFolder = 'tmp/'
 
 // folder where we keep original files
 config.targets = {
-	js: ['src/js/**/*.js'],
-	scss: ['src/scss/**/*.scss'],
+	js: 'src/js/**/*.js',
+	scss: 'src/scss/**/*.scss',
 	images: ['src/images/**/*.jpg', 'src/images/**/*.gif', 'src/images/**/*.png'],
-	html: ['src/html/**/*.html']
+	html: 'src/html/**/*.html'
 };
 
 // folders where we will keep compiled files
 config.destFolders = {
-	js: 'dest/static/js/',
-	css: 'dest/static/css/',
-	images: 'dest/static/images/',
-	html: ['dest/']
+	root: 'dest/',
+	js: 'dest/js/',
+	css: 'dest/css/',
+	images: 'dest/images/',
+	html: 'dest/'
 }
 
 // pattern for clean up compiled folders
@@ -30,6 +31,7 @@ config.patternsForClean = {
 
 // folders where we will keep revision manifests
 config.revFolders = {
+	root: config.tempFolder+'rev/',
 	js: config.tempFolder+'rev/js/',
 	css: config.tempFolder+'rev/css/',
 	images: config.tempFolder+'rev/images/',

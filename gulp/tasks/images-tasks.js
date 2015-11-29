@@ -1,15 +1,13 @@
 var gulp =	require('gulp'),
-//	rename = require('gulp-rename'),
 	debug = require('gulp-debug'),
-	gulpif = require('gulp-if'),
-	rev = require('gulp-rev'),
-	watch = require('gulp-watch'),
 	rm = require('gulp-rm'),
-	config = require('../configuration')
 	clean = function(){
 		gulp.src(config.patternsForClean.images, {read: false})
 			.pipe(rm({async: false}));
-	};
+	},
+	rev = require('gulp-rev'),
+	watch = require('gulp-watch'),
+	config = require('../configuration');
 
 // watch routine
 gulp.task('images-watch', function(){

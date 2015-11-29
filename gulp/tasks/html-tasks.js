@@ -1,28 +1,35 @@
 var gulp =	require('gulp'),
-//	rename = require('gulp-rename'),
 	debug = require('gulp-debug'),
-	gulpif = require('gulp-if'),
+	rm = require('gulp-rm'),
+    clean = function(){
+        gulp.src(config.patternsForClean.html, {read: false})
+            .pipe(rm({async: false}));
+    },
 	rev = require('gulp-rev'),
+	revCollector = require('gulp-rev-collector'),
 	watch = require('gulp-watch'),
+	livereload = require('gulp-livereload'),
 	config = require('../configuration');
 
-gulp.task('html', function(){
-	// clean before go release
-	if(config.getenv() == "rel"){
-		gulp.src([
-				config.destFolders.html+'**/*.html'
-			], {read: false})
-			.pipe(rm({async: false}));
-	}
-	// clean before go release
-
-	gulp.src(config.targets.scss)
-		.pipe(gulpif(config.getwatch() == "true", watch(config.targets.html)))
+// watch routine
+gulp.task('html-watch', function(){
+	clean(),
+	gulp.src(config.targets.html)
 		.pipe(debug())
-		.pipe(gulpif(config.getenv() == "rel", rev()))
-		.pipe(gulp.dest(config.destFolders.html))
-		.pipe(gulpif(config.getenv() == "rel", rev.manifest({
-			merge: true
-		}))) 
-		.pipe(gulp.dest(config.revFolders.html));
+		.pipe(watch(config.targets.html))
+		.pipe(gulp.dest(config.destFolders.html));
 });
+
+// release routine
+gulp.task('html-release', function(){
+    clean(),
+    gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.html])
+        .pipe(debug())
+        .pipe(revCollector({
+            replaceReved: true,
+            dirReplacements: {
+            }
+        }))
+		.pipe(gulp.dest(config.destFolders.html))
+});
+

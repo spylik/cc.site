@@ -1,18 +1,17 @@
 var gulp =	require('gulp'),
-//	rename = require('gulp-rename'),
 	debug = require('gulp-debug'),
-	sass = require('gulp-sass'),
-	gulpif = require('gulp-if'),
-	minify = require('gulp-minify-css'),
-	sourcemaps = require('gulp-sourcemaps'),
 	rm = require('gulp-rm'),
-	rev = require('gulp-rev'),
-	watch = require('gulp-watch'),
-	config = require('../configuration'),
     clean = function(){
         gulp.src(config.patternsForClean.css, {read: false})
             .pipe(rm({async: false}));
-    };
+    },
+	sass = require('gulp-sass'),
+	minify = require('gulp-minify-css'),
+	sourcemaps = require('gulp-sourcemaps'),
+	rev = require('gulp-rev'),
+	revCollector = require('gulp-rev-collector'),
+	watch = require('gulp-watch'),
+	config = require('../configuration');
 
 // watch routine
 gulp.task('scss-watch', function(){
@@ -33,8 +32,13 @@ gulp.task('scss-watch', function(){
 // release routine
 gulp.task('scss-release', function(){
 	clean(),
-	gulp.src(config.targets.scss)
+	gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.scss])
 		.pipe(debug())
+		.pipe(revCollector({
+			replaceReved: true,
+			dirReplacements: {
+			}
+		}))
 		.pipe(sass())
 		.on('error', function(err) {
 			sass.logError(err);
