@@ -19,7 +19,7 @@ gulp.task('css-clean', function(){
 
 // watch routine
 gulp.task('scss-watch', ['css-clean'], function(){
-	return gulp.src(config.targets.scss)
+	gulp.src(config.targets.scss)
 		.pipe(watch(config.targets.scss))
 		.pipe(debug({title: 'scss-watch:'}))
 		.pipe(sourcemaps.init()) 
