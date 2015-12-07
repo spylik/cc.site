@@ -9,14 +9,20 @@ var config = require('./gulp/configuration');
 var tasks = requireDir('./gulp/tasks');
 
 /* development tasks */
-gulp.task('default', function (task) {
+gulp.task('default', function (cb) {
 	config.setenv('dev');
-	runSequence(['images-watch'], ['scss-watch'], ['html-watch'], task);
+	runSequence(['images-watch', 'scss-watch', 'html-watch'], cb);
 });
 
 /* production tasks */
-gulp.task('release', function (task) {
+gulp.task('release', function (cb) {
 	config.setenv('release');
-	runSequence(['images-release'], ['scss-release'], ['html-release'], task);
+	return runSequence('images-release', 'scss-release', 'html-release', cb);
 });
+
+/* deployment tasks */
+gulp.task('deploy', ['release'], function() {
+	return runSequence('publish');
+});
+
 

@@ -1,17 +1,19 @@
 var gulp =	require('gulp'),
 	debug = require('gulp-debug'),
 	rm = require('gulp-rm'),
-	clean = function(){
-		gulp.src(config.patternsForClean.images, {read: false})
-			.pipe(rm({async: false}));
-	},
 	rev = require('gulp-rev'),
 	watch = require('gulp-watch'),
 	config = require('../configuration');
 
+// clean routine
+gulp.task('images-clean', function(cb){
+    gulp.src(config.patternsForClean.images, {read: false})
+    .pipe(rm({async: false}));
+    cb();
+});
+
 // watch routine
-gulp.task('images-watch', function(){
-	clean();
+gulp.task('images-watch', ['images-clean'], function(){
 	gulp.src(config.targets.images)
 		.pipe(debug())
 		.pipe(watch(config.targets.images))
@@ -19,8 +21,7 @@ gulp.task('images-watch', function(){
 });
 
 // release routine
-gulp.task('images-release', function(){
-	clean();
+gulp.task('images-release', ['images-clean'], function(cb){
 	gulp.src(config.targets.images)
 		.pipe(debug())
 		.pipe(rev())
@@ -29,6 +30,5 @@ gulp.task('images-release', function(){
 			merge: true
 		})) 
 		.pipe(gulp.dest(config.revFolders.images));
+	cb();
 });
-
-

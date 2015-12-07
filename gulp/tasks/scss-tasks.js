@@ -1,10 +1,6 @@
 var gulp =	require('gulp'),
 	debug = require('gulp-debug'),
 	rm = require('gulp-rm'),
-    clean = function(){
-        gulp.src(config.patternsForClean.css, {read: false})
-            .pipe(rm({async: false}));
-    },
 	sass = require('gulp-sass'),
 	minify = require('gulp-minify-css'),
 	sourcemaps = require('gulp-sourcemaps'),
@@ -13,9 +9,16 @@ var gulp =	require('gulp'),
 	watch = require('gulp-watch'),
 	config = require('../configuration');
 
+// clean routine
+gulp.task('css-clean', function(cb){
+    gulp.src(config.patternsForClean.css, {read: false})
+    .pipe(rm({async: false}));
+    cb();
+});
+
+
 // watch routine
-gulp.task('scss-watch', function(){
-	clean(),
+gulp.task('scss-watch', ['css-clean'], function(){
 	gulp.src(config.targets.scss)
 		.pipe(debug())
 		.pipe(watch(config.targets.scss))
@@ -30,8 +33,7 @@ gulp.task('scss-watch', function(){
 });
 
 // release routine
-gulp.task('scss-release', function(){
-	clean(),
+gulp.task('scss-release', ['css-clean'], function(cb){
 	gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.scss])
 		.pipe(debug())
 		.pipe(revCollector({
@@ -53,5 +55,6 @@ gulp.task('scss-release', function(){
 		.pipe(rev.manifest({
 			merge: true
 		}))
-		.pipe(gulp.dest(config.revFolders.css));	
+		.pipe(gulp.dest(config.revFolders.css));
+	cb();	
 });

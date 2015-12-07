@@ -1,6 +1,7 @@
 var gulp =	require('gulp'),
 	debug = require('gulp-debug'),
 	awspublish = require('gulp-awspublish'),
+	awspublishRouter = require('gulp-awspublish-router'),
 	config = require('../configuration');
 
 // publish to amazon S3 routine
@@ -14,25 +15,38 @@ gulp.task('publish', function(){
 		}
 	});
 
-	// define custom headers
-	var headers = {
-		'Cache-Control': 'max-age=315360000, no-transform, public'
-	};
-
-	return gulp.src(config.destFolders.css+"**/*.css")
+	return gulp.src(config.destFolders.root+"**/*")
 		.pipe(debug())
-		// gzip, Set Content-Encoding headers and add .gz extension
-		//.pipe(awspublish.gzip({ ext: '.gz' }))
-
-		// publisher will add Content-Length, Content-Type and headers specified above 
-		// If not specified it will set x-amz-acl to public-read by default 
-		.pipe(publisher.publish(headers))
-
+		.pipe(awspublishRouter({
+        	cache: {
+                // cache for 5 minutes by default
+                cacheTime: 300
+            },
+			routes: {
+				"^(?:.+)\\.(?:js|css|svg|ttf)$": {
+					key: "$&",
+					gzip: true,
+					cacheTime: 630720000 // 20 years
+				},
+				"^(?:.+)\\.(?:jpg|gif|png)$": {
+					key: "$&",
+					cacheTime: 630720000 // 20 years
+				},
+				"^(?:.+)\\.(?:html)$": {
+					key: "$&",
+					cacheTime: 300 // 5 minutes for html
+				},
+				// pass-through for anything that wasn't matched by routes above, to be uploaded with default options
+				"^.+$": "$&"
+			}
+		}))
+		.pipe(publisher.publish())
+		.pipe(publisher.sync())
 		// create a cache file to speed up consecutive uploads
 		.pipe(publisher.cache())
 		
 		// print upload updates to console
-		.pipe(awspublish.reporter());
+		.pipe(awspublish.reporter())
 });
 
 

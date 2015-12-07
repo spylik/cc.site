@@ -8,3 +8,4 @@ dest/images/**/*.jpg
 dest/images/**/*.gif
 dest/images/**/*.png
 tmp/rev/**
+.awspublish*
