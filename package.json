@@ -14,7 +14,7 @@
 	"url": "https://linkedin.com/in/spylik"
   },
   "devDependencies": {
-	"normalize.css": "^3.0.3",
+	"node-normalize-scss": "^1.0.3",
 	"jquery": "^2.1.4",
 	"fullpage.js": "^2.7.4",
 	"gulp": "^3.9.0",

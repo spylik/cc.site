@@ -10,20 +10,22 @@ var gulp =	require('gulp'),
 	config = require('../configuration');
 
 // clean routine
-gulp.task('css-clean', function(cb){
-    gulp.src(config.patternsForClean.css, {read: false})
-    .pipe(rm({async: false}));
-    cb();
+gulp.task('css-clean', function(){
+    return gulp.src(config.patternsForClean.css, {read: false})
+	.pipe(debug({title: 'css-clean:'}))
+    .pipe(rm());
 });
 
 
 // watch routine
 gulp.task('scss-watch', ['css-clean'], function(){
-	gulp.src(config.targets.scss)
-		.pipe(debug())
+	return gulp.src(config.targets.scss)
 		.pipe(watch(config.targets.scss))
+		.pipe(debug({title: 'scss-watch:'}))
 		.pipe(sourcemaps.init()) 
-		.pipe(sass())
+		.pipe(sass({
+			includePaths: require('node-normalize-scss').includePaths
+		}))
 		.on('error', function(err) {
 			sass.logError(err);
 			process.exit(2);
@@ -33,15 +35,17 @@ gulp.task('scss-watch', ['css-clean'], function(){
 });
 
 // release routine
-gulp.task('scss-release', ['css-clean'], function(cb){
-	gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.scss])
-		.pipe(debug())
+gulp.task('scss-release', ['css-clean'], function(){
+	return gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.scss])
+		.pipe(debug({title: 'scss-release:'}))
 		.pipe(revCollector({
 			replaceReved: true,
 			dirReplacements: {
 			}
 		}))
-		.pipe(sass())
+		.pipe(sass({
+			includePaths: require('node-normalize-scss').includePaths
+		}))
 		.on('error', function(err) {
 			sass.logError(err);
 			process.exit(2);
@@ -56,5 +60,4 @@ gulp.task('scss-release', ['css-clean'], function(cb){
 			merge: true
 		}))
 		.pipe(gulp.dest(config.revFolders.css));
-	cb();	
 });

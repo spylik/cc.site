@@ -8,31 +8,29 @@ var gulp =	require('gulp'),
 	config = require('../configuration');
 
 // clean routine
-gulp.task('html-clean', function(cb){
-	gulp.src(config.patternsForClean.html, {read: false})
-	.pipe(rm({async: false}));
-	cb();
+gulp.task('html-clean', function(){
+	return gulp.src(config.patternsForClean.html, {read: false})
+	.pipe(debug({title: 'html-clean:'}))
+	.pipe(rm());
 });
 
 // watch routine
 gulp.task('html-watch', ['html-clean'], function(){
 	gulp.src(config.targets.html)
-		.pipe(debug())
 		.pipe(watch(config.targets.html))
+		.pipe(debug({title: 'html-watch:'}))
 		.pipe(gulp.dest(config.destFolders.html));
-	cb();
 });
 
 // release routine
-gulp.task('html-release', ['html-clean'], function(cb){
-    return gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.html])
-        .pipe(debug())
+gulp.task('html-release', ['html-clean'], function(){
+	return gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.html])
+        .pipe(debug({title: 'html-release:'}))
 		.pipe(revCollector({
 		    replaceReved: true,
 		    dirReplacements: {
 		    }
 		}))
 		.pipe(gulp.dest(config.destFolders.html));
-	cb();
 });
 
