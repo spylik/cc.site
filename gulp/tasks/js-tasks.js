@@ -2,7 +2,10 @@ var gulp =	require('gulp'),
 	debug = require('gulp-debug'),
 	rm = require('gulp-rm'),
 	rev = require('gulp-rev'),
+	revCollector = require('gulp-rev-collector'),
+	uglify = require('gulp-uglify'),
 	watch = require('gulp-watch'),
+	saveLicense = require('uglify-save-license'),
 	config = require('../configuration');
 
 // clean routine
@@ -24,6 +27,14 @@ gulp.task('js-watch', ['js-clean'], function(){
 gulp.task('js-release',['js-clean'], function(){
 	return gulp.src(config.targets.js)
 		.pipe(debug({title: 'js-release:'}))
+        .pipe(revCollector({
+            replaceReved: true,
+            dirReplacements: {
+            }
+        }))
+		.pipe(uglify({
+			preserveComments: saveLicense
+		}))
 		.pipe(rev())
 		.pipe(gulp.dest(config.destFolders.js))
 		.pipe(rev.manifest({
