@@ -34,7 +34,8 @@ gulp.task('html-release', ['html-clean'], function(){
 		}))
 		.pipe(htmlmin({
 			collapseWhitespace: true,
-			removeComments: true
+			removeComments: true,
+			minifyJS: true
 		}))
 		.pipe(gulp.dest(config.destFolders.html));
 });
