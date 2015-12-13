@@ -24,7 +24,7 @@ gulp.task('scss-watch', ['css-clean'], function(){
 		.pipe(debug({title: 'scss-watch:'}))
 		.pipe(sourcemaps.init()) 
 		.pipe(sass({
-			includePaths: require('node-normalize-scss').includePaths
+			//includePaths: require('node-normalize-scss').includePaths
 		}))
 		.on('error', function(err) {
 			sass.logError(err);
@@ -36,7 +36,7 @@ gulp.task('scss-watch', ['css-clean'], function(){
 
 // release routine
 gulp.task('scss-release', ['css-clean'], function(){
-	return gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.scss])
+	return gulp.src([config.revFolders.root + "**/rev-manifest.json"].concat(config.targets.scss))
 		.pipe(debug({title: 'scss-release:'}))
 		.pipe(revCollector({
 			replaceReved: true,

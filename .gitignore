@@ -7,5 +7,6 @@ dest/css/**/*.map
 dest/images/**/*.jpg
 dest/images/**/*.gif
 dest/images/**/*.png
+dest/js/**/*.js
 tmp/rev/**
 .awspublish*

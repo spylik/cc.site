@@ -24,7 +24,7 @@ gulp.task('html-watch', ['html-clean'], function(){
 
 // release routine
 gulp.task('html-release', ['html-clean'], function(){
-	return gulp.src([config.revFolders.root + "**/rev-manifest.json", config.targets.html])
+	return gulp.src([config.revFolders.root + "**/rev-manifest.json"].concat(config.targets.html))
         .pipe(debug({title: 'html-release:'}))
 		.pipe(revCollector({
 		    replaceReved: true,

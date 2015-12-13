@@ -10,13 +10,13 @@ var tasks = requireDir('./gulp/tasks');
 /* development tasks */
 gulp.task('default', function (cb) {
 	config.setenv('dev');
-	runSequence('images-watch', 'scss-watch', 'html-watch', cb);
+	runSequence('images-watch', 'scss-watch', 'js-watch', 'html-watch', cb);
 });
 
 /* production tasks */
 gulp.task('release', function (cb) {
 	config.setenv('release');
-	runSequence('images-release', 'scss-release', 'html-release', cb);
+	runSequence('images-release', 'scss-release', 'js-release', 'html-release', cb);
 });
 
 /* deployment tasks */

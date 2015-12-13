@@ -14,9 +14,11 @@
 	"url": "https://linkedin.com/in/spylik"
   },
   "devDependencies": {
-	"node-normalize-scss": "^1.0.3",
+	"normalize.css": "^3.0.3",
 	"jquery": "^2.1.4",
 	"fullpage.js": "^2.7.4",
+	"require-dir": "^0.3.0",
+	"run-sequence": "^1.1.4",
 	"gulp": "^3.9.0",
 	"gulp-sass": "^2.1.0",
 	"gulp-debug": "^2.1.2",
@@ -34,8 +36,7 @@
 	"gulp-uglify": "^1.4.2",
 	"gulp-eol": "^0.1.1",
 	"gulp-jasmine": "^2.2.1",
-	"require-dir": "^0.3.0",
-	"run-sequence": "^1.1.4"
+	"node-normalize-scss": "^1.0.3"
   }
 }
 

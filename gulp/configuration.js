@@ -4,12 +4,23 @@ var config = module.exports = {};
 
 config.tempFolder = 'tmp/'
 
+config.dependency = {
+	js: [
+		'node_modules/jquery/dist/jquery.min.js',
+		'node_modules/fullpage.js/jquery.fullPage.js'
+	],
+	scss: [
+		'node_modules/normalize.css/normalize.css',
+		'node_modules/fullpage.js/jquery.fullPage.css'
+	]
+}
+
 // folder where we keep original files
 config.targets = {
-	js: 'src/js/**/*.js',
-	scss: 'src/scss/**/*.scss',
+	js: ['src/js/**/*.js'].concat(config.dependency.js),
+	scss: ['src/scss/**/*.scss'].concat(config.dependency.scss),
 	images: ['src/images/**/*.jpg', 'src/images/**/*.gif', 'src/images/**/*.png'],
-	html: 'src/html/**/*.html'
+	html: ['src/html/**/*.html']
 };
 
 // folders where we will keep compiled files
@@ -49,14 +60,4 @@ config.setenv = function (param) {
 config.getenv = function () {
 	'use strict';
 	return env;
-}
-
-// set and get glovel watch variable
-config.setwatch = function(param) {
-    'use strict ';
-    watch = param;
-}
-config.getwatch = function () {
-	'use strict';
-	return watch;
 }
