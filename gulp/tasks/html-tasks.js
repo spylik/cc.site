@@ -3,8 +3,9 @@ var gulp =	require('gulp'),
 	rm = require('gulp-rm'),
 	rev = require('gulp-rev'),
 	revCollector = require('gulp-rev-collector'),
+	useref = require('gulp-useref'),
 	watch = require('gulp-watch'),
-	livereload = require('gulp-livereload'),
+	htmlmin = require('gulp-htmlmin'),
 	config = require('../configuration');
 
 // clean routine
@@ -30,6 +31,10 @@ gulp.task('html-release', ['html-clean'], function(){
 		    replaceReved: true,
 		    dirReplacements: {
 		    }
+		}))
+		.pipe(htmlmin({
+			collapseWhitespace: true,
+			removeComments: true
 		}))
 		.pipe(gulp.dest(config.destFolders.html));
 });
